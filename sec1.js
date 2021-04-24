@@ -88,7 +88,7 @@ function solution14(count, inputArray) {
 }
 function solution15(text) {
     // substr 의 인자로  들어가도
-    return text.length % 2 === 0 ? text.substr((text.length / 2) - 1, 2) : text.substr((a.length / 2) - 1, 1);
+    return text.length % 2 === 0 ? text.substr((text.length / 2) - 1, 2) : text.substr((text.length / 2) - 1, 1);
 }
 function solution16(text) {
     // 중복 제거를 위해 object를 썻는데 indexOf 를 쓰면 그냥 result 에다가 해도 될거 같다
@@ -110,27 +110,4 @@ function solution17(arr) {
         }
     }
     return result;
-}
-
-function s1(count, arr) {
-    const result = [arr[0]]
-    for (let i = 1; i < count; i++) {
-        if (arr[i - 1] < arr[i]) {
-            result.push(arr[i]);
-        }
-    }
-    return result;
-}
-
-function s2(count, arr) {
-    let i = 0;
-    while (i < count) {
-        // console.log(arr);
-        if (arr[i - 1] >= arr[i]) {
-            arr.splice(i, 1);
-        } else {
-            i++;
-        }
-    }
-    return arr.length;
 }
