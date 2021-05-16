@@ -185,7 +185,11 @@ function sol8(str, anagram) {
     for (char of str) {
         obj[char] = 0;
     }
-    const anagramObj = {...obj};
+    // const anagramObj = {...obj};
+    const anagramObj = {};
+    for (char of anagram) {
+        anagramObj[char] = 0;
+    }
 
     for (let i = 0; i < anagram.length; i++) {
         char = str[i];

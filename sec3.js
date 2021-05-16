@@ -55,6 +55,7 @@ function s4(inputString, char) {
 }
 
 function s5(inputString) {
+    // 문자열을 순회하면서 이전 문자를 저장하여 비교
     let count = 1;
     let beforeChar = '';
     let result = '';
