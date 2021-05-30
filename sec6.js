@@ -119,13 +119,62 @@ function sol4(postfix) {
 // console.log(sol4('352+*9-'));
 // console.log(sol4('7352-*+4+'));
 
-function sol5() {
+function sol5(str) {
+  // ( 괄호가 들어오는것은 막대의 시작점이거나 절단 위치를 표시하는 것이고
+  // ) 괄호는 바로 앞의 문자가 ( 인경우 절단위치, 아니면 막대의 종료점을 표시하는 것
+  // 절단 위치에서는 stack 에 쌓인 갯수만큼 결과값이 늘어나고,
+  // 막대의 종료점에서는 결과값이 한개 늘어난다.
 
+  const stack = [];
+  let before;
+  let result = 0;
+  for (const char of str) {
+    if (char === '(') {
+      stack.push(char);
+    } else {
+      stack.pop();
+      if (before === '(') {
+        result += stack.length;
+      } else {
+        result += 1;
+      }
+    }
+    before = char;
+  }
+  return result;
 }
+// sol5('()(((()())(())()))(())');
+// sol5('(((()(()()))(())()))(()())');
+
 function sol6(n, k) {
-  debugger;
+  // index
+  // 0      1
+  // 1      2 2
+  // 2      3 4 4
+  // 3      4
+  // 4      5 5 7 7
+  // 5      6 7
+  // 6      7
+  // 7      8 8 8 4 7
+  // 8      1 2 4
+  const list = [];
+  for (let i = 0; i <= n; i++) {
+    list[i] = i + 1;
+  }
+  list[n] = 1;
+
+  let current = 1;
+  let count = k - 1;
+  while (list[current] !== current) {
+    if (!--count) {
+      list[current] = list[list[current]];
+      count = k - 1;
+    }
+    current = list[current];
+  }
+  return current;
 }
-sol6(8, 3);
+// sol6(8, 3);
 
 function sol7(required, subjectList) {
   // 필수 목록과 수강 목록을 String 으로 입력 받고,
