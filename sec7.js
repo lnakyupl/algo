@@ -84,7 +84,7 @@ function sol5(s, n, arr) {
 }
 // sol5(5, 9, [1, 2, 3, 2, 6, 2, 3, 5, 7]);
 
-function sol7(arr) {
+function sol6(arr) { // 좌표정렬
     // 입력으로 받은 배열을 복사해서 정렬한뒤
     // 두 배열의 값을 비교해 변경된 위치를 찾는다.
     const sortedArr = [...arr];
@@ -98,4 +98,99 @@ function sol7(arr) {
     }
     return result;
 }
-sol7([120, 130, 150, 150, 130, 150]);
+// sol6([120, 130, 150, 150, 130, 150]);
+
+function sol7(matrix) {
+    return matrix.sort((a, b) => {
+        if (a[0] === b[0]) {
+            return a[1] - b[1];
+        }
+        return a[0] - b[0];
+    });
+}
+// sol7([[2, 7], [1, 3], [1, 2], [2, 5], [3, 6]]);
+
+function sol8(conferences) { // 회의실 배정
+    // 주어진 기간 동안 가장 많은 회의를 하려면
+    // 입력 되는 시간 쌍의 차가 작은 (회의 시간이 짧은) 회의를 많이 넣을 수록 회의는 많이 할 수 있으므로
+    // 회의시간이 짧은 순으로 입력 값(회의)을 정렬한뒤, 회의실의 빈 스케쥴에 순서대로 넣었을 때 들어가는 회의 수를 구하면 된다
+    // (시작시간과 종료 시간이 같은 회의는 무한으로 입력이 가능하므로 예외 처리)
+
+    // 주어지는 입력값에 시간이 정수로 주어진다는 조건이 없지만 편의상........... 배열로....... 구현한다
+    // (만약 정수가 아닌 값이라면 회의실 스케쥴로 등록할때 등록 가능여부를 판단하는 로직을 변경해야 하고 탐색 비용이 더 들어갈 것이다.)
+
+    let count = 0;
+    const timeTable = [];
+
+    conferences.sort((a, b) => (a[1] - a[0]) - (b[1] - b[0]));
+
+    for (const conf of conferences) {
+        const temp = []; // conf: [2, 5]     2 ~ 5  -> [2, 3, 4]
+        for (let i = conf[0]; i < conf[1]; i++) {
+            temp.push(i);
+        }
+
+        if (temp.length === 0) { // 시작시간과 종료 시간이 같은 회의는 무한으로 입력이 가능
+            count++;
+        } else if (temp.every(time => !timeTable[time])) {
+            temp.forEach((time) => { timeTable[time] = true; });
+            count++;
+        }
+    }
+    return count;
+}
+// sol8([[1, 4], [2, 3], [3, 5], [4, 6], [5, 7]]);
+// sol8([[3, 3], [1, 3], [2, 3]]);
+
+function sol9(times) { // 결혼식
+    const timeTable = new Array(72);
+    timeTable.fill(0);
+    for (const time of times) {
+        for (let i = time[0]; i < time[1]; i++) {
+            timeTable[i]++;
+        }
+    }
+    return Math.max(...timeTable);
+}
+// sol9([[14, 18], [12, 15], [15, 20], [20, 30], [5, 14]]);
+
+function sol10(arr, findValue) { // 이분검색
+    arr.sort((a, b) => a - b);
+    let start = 0;
+    let end = arr.length - 1;
+    let index = Math.ceil(arr.length / 2);
+
+    while (arr[index] !== findValue) {
+        if (arr[index] > findValue) {
+            end = index - 1;
+        } else {
+            start = index + 1;
+        }
+        index = Math.ceil((end + start) / 2);
+        if (start >= end) {
+            break;
+        }
+    }
+    return index + 1;
+}
+// sol10([23, 87, 65, 12, 57, 32, 99, 81], 32);
+
+// function sol11(arr, M) {
+//     const sum = arr.reduce((v, a) => v + a);
+//     let min = Math.ceil(sum / 3);
+//     let max = sum;
+//     let size;
+//
+//     function isPossible(s) {
+//         return true;
+//     }
+//     while (min <= max) {
+//         size = Math.ceil((min + max) / 2);
+//         if (isPossible(size)) {
+//             max = size - 1;
+//         } else {
+//             min = size + 1;
+//         }
+//     }
+// }
+// sol11([1, 2, 3, 4, 5, 6, 7, 8 ,9], 3);
