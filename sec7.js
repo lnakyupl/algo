@@ -175,22 +175,75 @@ function sol10(arr, findValue) { // 이분검색
 }
 // sol10([23, 87, 65, 12, 57, 32, 99, 81], 32);
 
-// function sol11(arr, M) {
-//     const sum = arr.reduce((v, a) => v + a);
-//     let min = Math.ceil(sum / 3);
-//     let max = sum;
-//     let size;
-//
-//     function isPossible(s) {
-//         return true;
-//     }
-//     while (min <= max) {
-//         size = Math.ceil((min + max) / 2);
-//         if (isPossible(size)) {
-//             max = size - 1;
-//         } else {
-//             min = size + 1;
-//         }
-//     }
-// }
+function sol11(arr, M) {
+    // 모든 노래의 시간 합은 최대값이고
+    // 그 합을 DVD 갯수로 나눈 값이 최소값이다.
+    // 최대, 최소 값으로 부터 이진탐색을 실행하여
+    // 가능한 값중에서 최소 값을 찾는다.
+
+    const total = arr.reduce((v, a) => v + a);
+    let min = Math.ceil(total / M);
+    let max = total;
+    let size;
+
+    // 주어진 용량 크기로 모든 노래를 정해진 DVD 갯수에 넣을 수 있는지 확인
+    function isPossible(s) {
+        let count = 1;
+        let sum = 0;
+        for (let i = 0; i < arr.length; i++) {
+            if (s > sum + arr[i]) {
+                sum += arr[i];
+            } else {
+                sum = arr[i];
+                count++;
+            }
+        }
+        return count <= M;
+    }
+
+    while (max - min > 1) {
+        size = Math.ceil((min + max) / 2);
+        if (isPossible(size)) {
+            max = size;
+        } else {
+            min = size;
+        }
+    }
+    return min;
+}
 // sol11([1, 2, 3, 4, 5, 6, 7, 8 ,9], 3);
+
+function sol12(position, c) {
+    // 최소거리는 1이고, 최대 거리는 가장 두 먼 마굿간의 거리
+    // 거리 비교를 위해 정렬한뒤 시작하며
+    // 가능한지를 확인 하는 함수가 다르지만
+    // 이분탐색하는 로직은 같음
+
+    position.sort((a, b) => a - b);
+
+    function isPossible(dist) {
+        const fix = [];
+        fix.push(position[0]);
+        for (let i = 1; i < position.length; i++) {
+            if (position[i] - fix[fix.length - 1] >= dist) {
+                fix.push(position[i]);
+            }
+        }
+        return fix.length >= c;
+    }
+
+    let min = 1;
+    let max = position[position.length - 1] - position[0];
+    let result;
+
+    while (max - min > 1) {
+        result = Math.ceil((max + min) / 2);
+        if (isPossible(result)) {
+            min = result;
+        } else {
+            max = result;
+        }
+    }
+    return min;
+}
+// console.log(sol12([1, 2, 8, 4, 9], 3));
