@@ -142,8 +142,10 @@ function sol6(C, arr) {
 function sol7(M, arr) {
     const availableValues = [];
     arr.sort((a, b) => a[1] - b[1]);
+    let counter = 0;
 
     function find(scoreSum, timeSum, list) {
+        counter++;
         if (timeSum > M) {
             return;
         }
@@ -159,6 +161,7 @@ function sol7(M, arr) {
     find(0, 0, arr);
 
     console.log(Math.max(...availableValues));
+    console.log(counter);
 }
 // sol7(20, [
 //     [10, 5],
@@ -167,3 +170,113 @@ function sol7(M, arr) {
 //     [6, 3],
 //     [7, 4],
 // ]);
+
+function sol8(N, M) {
+    //         0
+    //   1     2     3
+    // 1 2 3 1 2 3 1 2 3
+
+    function createTree(arr, depth, value) {
+        const node = { value };
+
+        if (!depth) {
+            return node;
+        }
+
+        node.child = [];
+        for (const v of arr) {
+            node.child.push(createTree(arr, depth - 1, v));
+        }
+        return node;
+    }
+
+    let count = 0;
+    function traversal(str, node) {
+        if (!node.child) {
+            console.log(`${str} ${node.value}`);
+            count++;
+            return;
+        }
+        for (const c of node.child) {
+            if (node.value) {
+                traversal(`${str} ${node.value}`, c);
+            } else {
+                traversal(str, c);
+            }
+        }
+    }
+
+    // [1, 2, 3]
+    const array = [...Array(N).keys()].map(i => i + 1);
+
+    const root = createTree(array, M, 0);
+    traversal('', root);
+    console.log(count);
+}
+// sol8(3, 2);
+
+function sol9(coin, M) {
+    coin.sort((a, b) => a - b);
+    const dp = new Array(M + 1).fill(Number.MAX_SAFE_INTEGER);
+    dp[0] = 0;
+    // console.log(...dp);
+    for (let i = 0; i < coin.length; i++) {
+        for (let j = coin[i]; j <= M; j++) {
+            dp[j] = Math.min(dp[j], dp[j - coin[i]] + 1);
+            // console.log(...dp);
+        }
+    }
+    return dp[M];
+}
+sol9([1, 3, 5], 10);
+
+function sol10(array, M) {
+    //       0
+    //   3   6   9
+    //  6 9 3 9 3 6
+
+    function createTree(arr, depth, value) {
+        const node = { value };
+
+        if (!depth) {
+            return node;
+        }
+
+        node.child = [];
+        for (let i = 0; i < arr.length; i++) {
+            const restArray = arr.slice();
+            restArray.splice(i, 1);
+            node.child.push(createTree(restArray, depth - 1, arr[i]));
+        }
+        return node;
+    }
+
+    let count = 0;
+    function traversal(str, node) {
+        if (!node.child) {
+            console.log(`${str} ${node.value}`);
+            count++;
+            return;
+        }
+        for (const c of node.child) {
+            if (node.value) {
+                traversal(`${str} ${node.value}`, c);
+            } else {
+                traversal(str, c);
+            }
+        }
+    }
+    const root = createTree(array, M, 0);
+    traversal('', root);
+    console.log(count);
+}
+// sol10([3, 6, 9], 2);
+
+function sol11(n) {
+    let result = 1;
+    for (let i = 1; i <= n; i++) {
+        result *= i;
+    }
+    return result;
+}
+// sol11(5);
