@@ -280,3 +280,146 @@ function sol11(n) {
     return result;
 }
 // sol11(5);
+
+function sol12(N, R) {
+    const m = new Array(N + 1);
+    for (let i = 0; i < m.length; i++) {
+        m[i] = [];
+    }
+    function combination(n, r) {
+        let result;
+        if (m[n][r]) {
+            return m[n][r];
+        }
+
+        if (r === 0 || n === r) {
+            result = 1;
+        } else if (r === 1) {
+            result = n;
+        } else {
+            result = combination(n - 1, r - 1) + combination(n - 1, r);
+        }
+        m[n][r] = result;
+
+        return result;
+    }
+    console.log(combination(N, R));
+}
+// sol12(5, 3);
+// sol12(33, 19);
+
+function sol13(N, F) {
+    // a, b, c, d, e 의 수열이 있고, 파스칼 삼각형처럼 수를 합산해 나갈때
+    // 맨 마지막의 값은 a, b, c, d, e 의 합으로 구할수 있는데
+    // 이 경우 수열의 길이가 5 이므로
+    // 4C0 * a   +   4C1 * b   +   4C2 * c   +   4C3 * d   + 4C4 * e  로 구할수 있다.
+
+    // 순열(getPermutation)과, 조합(combination), 주어진 순열로 맨 마지막의 값을 구하는 함수(total)
+    // 세가지를 구현하여 해결한다.
+
+    const m = new Array(N + 1);
+    for (let i = 0; i < m.length; i++) {
+        m[i] = [];
+    }
+    function combination(n, r) {
+        let result;
+        if (m[n][r]) {
+            return m[n][r];
+        }
+
+        if (r === 0 || n === r) {
+            result = 1;
+        } else if (r === 1) {
+            result = n;
+        } else {
+            result = combination(n - 1, r - 1) + combination(n - 1, r);
+        }
+        m[n][r] = result;
+
+        return result;
+    }
+
+
+    const usedFlag = Array(N + 1).fill(false);
+    const permutationList = [];
+    function getPermutation(list) {
+        if (list.length === N) {
+            permutationList.push(list);
+            return;
+        }
+        for (let i = 1; i < N + 1; i++) {
+            if (!usedFlag[i]) {
+                usedFlag[i] = true;
+                getPermutation([...list, i]);
+                usedFlag[i] = false;
+            }
+        }
+    }
+    getPermutation([]);
+
+
+
+    function total(arr) {
+        let sum = 0;
+        for (let i = 0; i < arr.length; i++) {
+            sum += combination(N - 1, i) * arr[i];
+        }
+        return sum;
+    }
+
+    for (let i = 0; i < permutationList.length; i++) {
+        if (total(permutationList[i]) === F) {
+            return permutationList[i];
+        }
+    }
+}
+console.log(sol13(4, 16));
+
+
+function sol14(N, M) {
+    const check = new Array(N);
+    let count = 0;
+
+    function combination(arr) {
+        if (arr.filter(v => v).length === M) {
+            const result = arr.map((b, i) => b ? i + 1 : 0).filter(n => n);
+            console.log(...result);
+            count++;
+            return;
+        }
+        if (arr.length >= N) {
+            return;
+        }
+        combination([...arr, true]);
+        combination([...arr, false]);
+    }
+    combination([]);
+    console.log(count);
+}
+sol14(4, 2);
+
+
+function sol15(array, K, M) {
+    const check = new Array(array.length);
+    let count = 0;
+
+    function combination(arr) {
+        if (arr.filter(v => v).length === K) {
+            const result = arr.map((b, i) => b ? array[i] : 0);
+            const sum = result.reduce((a, b) => a + b);
+            if (sum % M === 0) {
+                // console.log(...result.filter(x => x));
+                count++;
+            }
+            return;
+        }
+        if (arr.length >= array.length) {
+            return;
+        }
+        combination([...arr, true]);
+        combination([...arr, false]);
+    }
+    combination([]);
+    console.log(count);
+}
+sol15([2, 4, 5, 8, 12], 3, 6);
