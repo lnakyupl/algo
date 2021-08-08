@@ -377,7 +377,6 @@ console.log(sol13(4, 16));
 
 
 function sol14(N, M) {
-    const check = new Array(N);
     let count = 0;
 
     function combination(arr) {
@@ -400,7 +399,6 @@ sol14(4, 2);
 
 
 function sol15(array, K, M) {
-    const check = new Array(array.length);
     let count = 0;
 
     function combination(arr) {
