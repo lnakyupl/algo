@@ -137,7 +137,7 @@ function sol4() {
     queue.unshift(root);
 
     let node;
-    while(node = queue.pop()) {
+    while (node = queue.pop()) {
         if (node.left) {
             queue.unshift(node.left);
         }
@@ -148,4 +148,138 @@ function sol4() {
     }
     console.log(result);
 }
-sol4();
+// sol4();
+
+function sol5(start, end) {
+    const next = [-1, 1, 5];
+    const queue = [];
+    queue.push(...next.map(p => ({ cur: start + p, count: 1 })));
+
+    let result;
+    while (true) {
+        const { cur, count } = queue.shift();
+        if (cur === end) {
+            result = count;
+            break;
+        }
+        queue.push(...next.map(p => ({ cur: cur + p, count: count + 1 })));
+    }
+    console.log(result);
+}
+// sol5(5, 14);
+// sol5(8, 3);
+
+function sol6(map) {
+    let count = 0;
+    const N = map.length + 2;
+    const matrix = Array(N).fill(null)
+        .map(() => Array(N).fill(0));
+    const flag = Array(N).fill(null)
+        .map(() => Array(N).fill(false));
+    map.forEach((arr, i) => {
+        arr.forEach((value, j) => {
+            matrix[i + 1][j + 1] = value;
+        });
+    });
+    const direction = [
+        [-1, -1],
+        [-1, 0],
+        [-1, 1],
+        [0, -1],
+        [0, 1],
+        [1, -1],
+        [1, 0],
+        [1, 1],
+    ];
+
+    function checkIsolated(m, n) {
+        flag[m][n] = true;
+        direction.forEach(([h, v]) => {
+            if (matrix[m + h][n + v] && !flag[m + h][n + v]) {
+                checkIsolated(m + h, n + v);
+            }
+        });
+    }
+
+    for (let i = 1; i <= map.length; i++) {
+        for (let j = 1; j <= map.length; j++) {
+            if (matrix[i][j] && !flag[i][j]) {
+                checkIsolated(i, j);
+                count++;
+            }
+        }
+    }
+
+    console.log(count);
+}
+// sol6([
+// [1, 1, 0, 0, 0, 1, 0],
+// [0, 1, 1, 0, 1, 1, 0],
+// [0, 1, 0, 0, 0, 0, 0],
+// [0, 0, 0, 1, 0, 1, 1],
+// [1, 1, 0, 1, 1, 0, 0],
+// [1, 0, 0, 0, 1, 0, 0],
+// [1, 0, 1, 0, 1, 0, 0]]);
+
+function sol7(map) {
+    let count = 0;
+    const N = map.length + 2;
+    const matrix = Array(N).fill(null)
+        .map(() => Array(N).fill(0));
+    const flag = Array(N).fill(null)
+        .map(() => Array(N).fill(false));
+    map.forEach((arr, i) => {
+        arr.forEach((value, j) => {
+            matrix[i + 1][j + 1] = value;
+        });
+    });
+    const direction = [
+        [-1, -1],
+        [-1, 0],
+        [-1, 1],
+        [0, -1],
+        [0, 1],
+        [1, -1],
+        [1, 0],
+        [1, 1],
+    ];
+    const queue = [];
+
+    function checkIsolated(m, n) {
+        flag[m][n] = true;
+        direction.forEach(([h, v]) => {
+            if (matrix[m + h][n + v] && !flag[m + h][n + v]) {
+                queue.push([m + h, n + v]);
+            }
+        });
+
+        let next;
+        while (next = queue.shift()) {
+            flag[next[0]][next[1]] = true;
+            direction.forEach(([h, v]) => {
+                if (matrix[next[0] + h][next[1] + v] && !flag[next[0] + h][next[1] + v]) {
+                    queue.push([next[0] + h, next[1] + v]);
+                }
+            });
+        }
+    }
+
+    for (let i = 1; i <= map.length; i++) {
+        for (let j = 1; j <= map.length; j++) {
+            if (matrix[i][j] && !flag[i][j]) {
+                checkIsolated(i, j);
+                count++;
+            }
+        }
+    }
+
+    console.log(count);
+}
+sol7([
+    [1, 1, 0, 0, 0, 1, 0],
+    [0, 1, 1, 0, 1, 1, 0],
+    [0, 1, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 0, 1, 1],
+    [1, 1, 0, 1, 1, 0, 0],
+    [1, 0, 0, 0, 1, 0, 0],
+    [1, 0, 1, 0, 1, 0, 0]]);
