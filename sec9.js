@@ -151,6 +151,10 @@ function sol4() {
 // sol4();
 
 function sol5(start, end) {
+    // 시작점에서 점프로 이동한 세곳의 위치와 이동 횟수를 queue 에 넣고
+    // queue 가져온 위치에서 세곳의 위치와 이동횟수를 넣는 연산을 반복하다가
+    // end 지점의 위치를 찾는다
+
     const next = [-1, 1, 5];
     const queue = [];
     queue.push(...next.map(p => ({ cur: start + p, count: 1 })));
@@ -170,6 +174,17 @@ function sol5(start, end) {
 // sol5(8, 3);
 
 function sol6(map) {
+    //                00000000
+    // 111100         01111000
+    // 100000         01000000
+    // 000111         00001110
+    // 111000         01110000
+    //                00000000
+
+    // 입력된 map 을 0으로 패딩한 matrix 를 만들고
+    // 모든 위치를 2중 for 문으로 순회하여 checkIsolated 함수를 호출한다
+    // checkIsolated(m, n) 함수는 2차원 배열을 이용해서 (m, n) 지점이 count 되었는지를 체크한다.
+
     let count = 0;
     const N = map.length + 2;
     const matrix = Array(N).fill(null)
